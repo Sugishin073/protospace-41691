@@ -4,11 +4,12 @@ class CommentsController < ApplicationController
   def create
     @comment = current_user.comments.new(comment_params)
     @prototype = Prototype.find(params[:prototype_id])
+    @comments = @prototype.comments.includes(:user)
 
     if @comment.save
       redirect_to @prototype, notice: "コメントを投稿しました。"
     else
-      render "prototypes/show"
+      render "prototypes/show", status: :unprocessable_entity
     end
   end
 
